@@ -1,5 +1,5 @@
 const queries = {
-        getAllEntries:
+        getAllAuthEntries:
                 `SELECT e.title, e.image, e.date, e.content
             FROM entries AS e
             INNER JOIN authors AS a
@@ -8,11 +8,17 @@ const queries = {
             ORDER BY e.title
             LIMIT $2
             OFFSET $3`,
+        getAllEntries:
+                `SELECT title, image, date, content
+            FROM entries 
+            ORDER BY title
+            LIMIT $1
+            OFFSET $2`,
         getEntry: `SELECT e.title, e.image, e.date, e.content
             FROM entries AS e
             INNER JOIN authors AS a
             ON e.email = a.email
-            WHERE a.email = $1 and e.title = $2`,
+            WHERE e.title = $1 and e.email = $2`,
         createEntry: `INSERT INTO entries(title,content,extract, image, email, category)
             VALUES 
             ($1, $2, $3, $4, $5, $6)`,
@@ -22,13 +28,11 @@ const queries = {
         deleteEntries: `DELETE 
            FROM entries 
            WHERE title=$1 AND email=$2`,
-        searchEntries: `SELECT e.title, e.image, e.date, e.extract
-            FROM entries AS e
-            INNER JOIN authors AS a
-            ON e.email = a.email
-            WHERE a.email = $1 AND e.title LIKE $2 OR a.email = $1 AND e.content LIKE $2
-            LIMIT $3
-            OFFSET $4`,
+        searchEntries: `SELECT title, image, date, extract
+            FROM entries
+            WHERE  title LIKE $1 OR content LIKE $1
+            LIMIT $2
+            OFFSET $3`,
 }
 
 module.exports = queries;

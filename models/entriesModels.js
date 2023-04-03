@@ -9,11 +9,25 @@ const pool = new Pool({
 })
 
 //get all entries by author
-const getEntries = async (email, limit, skip) => {
+const getAuthEntries = async (email, limit, skip) => {
     let client, result;
     try {
         client = await pool.connect()
-        const data = await client.query(queries.getAllEntries, [email, limit, skip])
+        const data = await client.query(queries.getAllAuthEntries, [email, limit, skip])
+        result = data.rows
+    } catch (error) {
+        console.log(error)
+        throw error
+    } finally { client.release() }
+
+    return result
+}
+
+const getEntriesAll = async (limit, skip) => {
+    let client, result;
+    try {
+        client = await pool.connect()
+        const data = await client.query(queries.getAllEntries, [limit, skip])
         result = data.rows
     } catch (error) {
         console.log(error)
@@ -71,11 +85,11 @@ const removeEntry = async (email, title) => {
     } finally { client.release() }
     return result
 }
-const searchForEntry = async (search, author, limit, skip) => {
+const searchForEntry = async (search, limit, skip) => {
     let client, result;
     try {
         client = await pool.connect()
-        data = await client.query(queries.searchEntries, [author, `%${search}%`, limit, skip])
+        data = await client.query(queries.searchEntries, [`%${search}%`, limit, skip])
         result = data.rows
     } catch (error) {
         console.log(error)
@@ -83,4 +97,4 @@ const searchForEntry = async (search, author, limit, skip) => {
     } finally { client.release() }
     return result
 }
-module.exports = { getEntries, getEntryByTitle, createNewEntry, changeEntry, removeEntry, searchForEntry }
+module.exports = { getAuthEntries, getEntriesAll, getEntryByTitle, createNewEntry, changeEntry, removeEntry, searchForEntry }

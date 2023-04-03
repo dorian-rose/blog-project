@@ -1,11 +1,28 @@
-const { getEntries, getEntryByTitle, createNewEntry, changeEntry, removeEntry, searchForEntry } = require("../models/entriesModels")
+const { getAuthEntries, getEntriesAll, getEntryByTitle, createNewEntry, changeEntry, removeEntry, searchForEntry } = require("../models/entriesModels")
 
-const getAllEntries = async (req, res) => {
+const getOneAuthEntries = async (req, res) => {
     let { author, limit, skip } = req.params
     try {
-        const entries = await getEntries(author, limit, skip)
+        const entries = await getAuthEntries(author, limit, skip)
         if (entries.length == 0) {
             return res.status(404).json({ ok: false, msg: "You have no entries" })
+        } else {
+            return res.status(200).json({
+                ok: true,
+                entries
+            })
+        }
+    } catch (error) {
+        res.status(500).json({ ok: false, msg: "Error retrieving entries" })
+    }
+}
+
+const getEntries = async (req, res) => {
+    let { limit, skip } = req.params
+    try {
+        const entries = await getEntriesAll(limit, skip)
+        if (entries.length == 0) {
+            return res.status(404).json({ ok: false, msg: "No entries available" })
         } else {
             return res.status(200).json({
                 ok: true,
@@ -62,9 +79,9 @@ const deleteEntry = async (req, res) => {
 }
 
 const searchEntry = async (req, res) => {
-    const { search, author, limit, skip } = req.params
+    const { search, limit, skip } = req.params
     try {
-        const entries = await searchForEntry(search, author, limit, skip)
+        const entries = await searchForEntry(search, limit, skip)
         if (entries.length == 0) { res.status(404).json({ ok: false, msg: "No results" }) }
         else {
             res.status(200).json({ ok: true, entries })
@@ -74,5 +91,5 @@ const searchEntry = async (req, res) => {
     }
 }
 
-module.exports = { getAllEntries, getEntry, createEntry, updateEntry, deleteEntry, searchEntry }
+module.exports = { getOneAuthEntries, getEntries, getEntry, createEntry, updateEntry, deleteEntry, searchEntry }
 
