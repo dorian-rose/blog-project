@@ -43,7 +43,6 @@ const getEntryByTitle = async (title, author) => {
         client = await pool.connect()
         const data = await client.query(queries.getEntry, [title, author])
         result = data.rows
-
     } catch (error) {
         console.log(error)
         throw error

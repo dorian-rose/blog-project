@@ -1,6 +1,6 @@
 const queries = {
     getAllAuthEntries:
-        `SELECT e.title, e.image, e.date, e.extract, a.email
+        `SELECT e.title, e.image, e.date, TO_CHAR(e.date, 'DD/MM/YYYY') AS formatDate, e.extract, a.email
             FROM entries AS e
             INNER JOIN authors AS a
             ON e.email = a.email
@@ -9,12 +9,12 @@ const queries = {
             LIMIT $2
             OFFSET $3`,
     getAllEntries:
-        `SELECT title, image, date, content, extract, email
+        `SELECT title, image, date, TO_CHAR(date, 'DD/MM/YYYY') AS formatDate, content, extract, email
             FROM entries 
             ORDER BY title
             LIMIT $1
             OFFSET $2`,
-    getEntry: `SELECT e.title, e.image, e.extract, e.date, TO_CHAR(e.date, 'DD/MM/YYYY') AS formatDate, e.content, e.category, a.email
+    getEntry: `SELECT e.title, e.image, e.extract, e.date, TO_CHAR(e.date, 'DD/MM/YYYY') AS formatDate, e.content, e.category, a.email, a.fullname
             FROM entries AS e
             INNER JOIN authors AS a
             ON e.email = a.email
@@ -33,6 +33,12 @@ const queries = {
             WHERE  title LIKE $1 OR content LIKE $1
             LIMIT $2
             OFFSET $3`,
+    getUserReader: `SELECT fullname, email, password
+            FROM readers
+            WHERE email=$1`,
+    getUserAuthor: `SELECT fullname, email, password
+            FROM authors
+            WHERE email=$1`
 }
 
 module.exports = queries;

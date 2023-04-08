@@ -11,8 +11,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 //configure routers
-//app.use("/authors", require("./routers/authorRouters"))
 app.use("/entries", require("./routers/entriesRouters"))
+app.use("/users", require("./routers/userRouters"))
 
 //let app to listen to port 
 app.listen(port, () => {

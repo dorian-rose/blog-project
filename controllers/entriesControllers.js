@@ -40,7 +40,7 @@ const getEntry = async (req, res) => {
     try {
         const entry = await getEntryByTitle(title, author)
         if (entry.length == 0) {
-            res.status(404).json({ ok: false, msg: "You don't have an article with this title" })
+            res.status(404).json({ ok: false, msg: "Unable to retrieve this article" })
         } else { res.status(200).json({ ok: true, entry }) }
     } catch (error) {
         res.status(500).json({ ok: false, msg: "Error retrieving entry" })
@@ -51,10 +51,16 @@ const createEntry = async (req, res) => {
     const body = req.body
     const { author } = req.params
     try {
-        await createNewEntry(body, author)
-        res.status(201).json({ ok: true })
+        const entry = await getEntryByTitle(body.title, author)
+        if (entry.length) {
+            res.status(500).json({ ok: false, errors: [{ msg: "You already have an article with this title" }] })
+        } else {
+            await createNewEntry(body, author)
+            res.status(201).json({ ok: true })
+        }
     } catch (error) {
-        res.status(500).json({ ok: false, msg: "Error creating entry" })
+        console.log(error)
+        res.status(500).json({ ok: false, errors: [{ msg: "Error creating entry" }] })
     }
 
 }
@@ -62,10 +68,16 @@ const updateEntry = async (req, res) => {
     const { title, author } = req.params
     const body = req.body
     try {
-        await changeEntry(body, author, title)
-        res.status(201).json({ ok: true })
+        const entry = await getEntryByTitle(body.title, author)
+        console.log("entry", entry)
+        if (entry.length) {
+            res.status(500).json({ ok: false, errors: [{ msg: "You already have an article with this title" }] })
+        } else {
+            await changeEntry(body, author, title)
+            res.status(201).json({ ok: true })
+        }
     } catch (error) {
-        res.status(500).json({ ok: false, msg: "Error updating entry" })
+        res.status(500).json({ ok: false, errors: [{ msg: "Error creating entry" }] })
     }
 }
 const deleteEntry = async (req, res) => {
