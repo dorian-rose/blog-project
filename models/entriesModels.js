@@ -96,4 +96,27 @@ const searchForEntry = async (search, limit, skip) => {
     } finally { client.release() }
     return result
 }
-module.exports = { getAuthEntries, getEntriesAll, getEntryByTitle, createNewEntry, changeEntry, removeEntry, searchForEntry }
+
+const getNumberEntries = async (email, search) => {
+    let client, result;
+    try {
+        client = await pool.connect()
+        if (email) {
+            data = await client.query(queries.getNumEntriesPerAuth, [email])
+            result = data.rows
+        } else if (search) {
+            data = await client.query(queries.getNumEntriesSearch, [search])
+            result = data.rows
+        } else {
+            data = await client.query(queries.getNumEntries)
+            result = data.rows
+        }
+    } catch (error) {
+        console.log(error)
+        throw error
+    } finally { client.release() }
+    return result
+}
+
+
+module.exports = { getAuthEntries, getEntriesAll, getEntryByTitle, createNewEntry, changeEntry, removeEntry, searchForEntry, getNumberEntries }

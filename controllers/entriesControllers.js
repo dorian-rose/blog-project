@@ -1,4 +1,4 @@
-const { getAuthEntries, getEntriesAll, getEntryByTitle, createNewEntry, changeEntry, removeEntry, searchForEntry } = require("../models/entriesModels")
+const { getAuthEntries, getEntriesAll, getEntryByTitle, createNewEntry, changeEntry, removeEntry, searchForEntry, getNumberEntries } = require("../models/entriesModels")
 
 const getOneAuthEntries = async (req, res) => {
     let { author, limit, skip } = req.params
@@ -103,5 +103,26 @@ const searchEntry = async (req, res) => {
     }
 }
 
-module.exports = { getOneAuthEntries, getEntries, getEntry, createEntry, updateEntry, deleteEntry, searchEntry }
+const getNumberOfEntries = async (req, res) => {
+    const email = req.body.email
+    const search = req.body.search
+    let numEntries;
+    try {
+        if (email) {
+            numEntries = await getNumberEntries(email)
+        } else if (search) {
+            numEntries = await getNumberEntries(email)
+        } else {
+            numEntries = await getNumberEntries()
+        }
+        if (numEntries == 0) { res.status(404).json({ ok: false, msg: "No Entries" }) }
+        else {
+            res.status(200).json({ ok: true, numEntries })
+        }
+    } catch (error) {
+        res.status(500).json({ ok: false, msg: "Error returning number of entries" })
+    }
+}
+
+module.exports = { getOneAuthEntries, getEntries, getEntry, createEntry, updateEntry, deleteEntry, searchEntry, getNumberOfEntries }
 

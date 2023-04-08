@@ -4,7 +4,7 @@ const router = express.Router()
 const { check } = require("express-validator");
 const { validateInputs } = require("../middleware/inputValidation");
 //import functions from controllers
-const { getOneAuthEntries, getEntries, getEntry, createEntry, updateEntry, deleteEntry, searchEntry } = require("../controllers/entriesControllers")
+const { getOneAuthEntries, getEntries, getEntry, createEntry, updateEntry, deleteEntry, searchEntry, getNumberOfEntries } = require("../controllers/entriesControllers")
 
 router.get("/entries/:author/:limit/:skip", getOneAuthEntries)
 router.get("/all-entries/:limit/:skip", getEntries)
@@ -27,6 +27,7 @@ router.put("/update/:title/:author", [
 ], updateEntry)
 router.delete("/delete", deleteEntry)
 router.get("/search/:search/:limit/:skip", searchEntry)
+router.post("/number", getNumberOfEntries)
 
 
 module.exports = router

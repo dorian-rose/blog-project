@@ -38,7 +38,10 @@ const queries = {
             WHERE email=$1`,
     getUserAuthor: `SELECT fullname, email, password
             FROM authors
-            WHERE email=$1`
+            WHERE email=$1`,
+    getNumEntries: ` SELECT count(*) FROM entries`,
+    getNumEntriesPerAuth: `SELECT count(*) FROM entries WHERE email = $1`,
+    getNumEntriesSearch: `SELECT count(*) FROM entries WHERE  title LIKE $1 OR content LIKE $1`
 }
 
 module.exports = queries;
