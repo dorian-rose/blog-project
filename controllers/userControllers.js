@@ -29,7 +29,6 @@ const getAuthor = async (req, res) => {
         const { email } = req.body;
         //info from userModels
         const user = await getUserAuthor(email)
-        console.log("user", user[0].email)
 
         res.status(200).json({
             ok: true,
@@ -68,7 +67,7 @@ const loginUserReader = async (req, res) => {
 
         //if password is not a match in step above, return error
         if (!passwordMatch) {
-            console.log("password doesn't match")
+
             return res.status(400).json({
                 ok: false,
                 passwordMatch,
@@ -117,7 +116,7 @@ const loginUserAuthor = async (req, res) => {
 
         //if password is not a match in step above, return error
         if (!passwordMatch) {
-            console.log("password doesn't match")
+
             return res.status(400).json({
                 ok: false,
                 passwordMatch,

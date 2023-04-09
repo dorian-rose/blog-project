@@ -78,9 +78,9 @@ const updateEntry = async (req, res) => {
     try {
         //call to entriesModels to find title of article to be changed
         const entry = await getEntryByTitle(body.title, author)
-        console.log("entry", entry)
-        if (entry.length) {
-            res.status(500).json({ ok: false, errors: [{ msg: "You already have an article with this title" }] })
+
+        if (entry.length == 0) { //entry doesn't exist
+            res.status(500).json({ ok: false, errors: [{ msg: "This article doesn't exist" }] })
         } else {
             //if entry exists, call to entriesModels to update columns
             await changeEntry(body, author, title)
