@@ -7,6 +7,7 @@ const { getUserReader, getUserAuthor } = require("../models/userModels")
 const getReader = async (req, res) => {
     try {
         const { email } = req.body;
+        //call to userModels
         const user = await getUserReader(email)
 
         res.status(200).json({
@@ -26,6 +27,7 @@ const getReader = async (req, res) => {
 const getAuthor = async (req, res) => {
     try {
         const { email } = req.body;
+        //info from userModels
         const user = await getUserAuthor(email)
         console.log("user", user[0].email)
 
@@ -42,7 +44,7 @@ const getAuthor = async (req, res) => {
     }
 }
 
-//login user reader (not admin)
+//login user reader (not admin)==> Should this be frontend?
 const loginUserReader = async (req, res) => {
     //retrieve reader details to see if exists
     try {
@@ -142,7 +144,7 @@ const loginUserAuthor = async (req, res) => {
     }
 };
 
-//renew token
+//renew token 
 const renew = async (req, res) => {
     const { id, name } = req;
     const token = await generateJwt(id, name);

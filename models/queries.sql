@@ -25,7 +25,7 @@ CREATE TABLE entries (
   FOREIGN KEY (email) REFERENCES authors(email)
 );
 
---CREATE ENTIES IN AUTHORS TABLE (test data) 
+--CREATE ENTRIES IN AUTHORS TABLE (test data) 
 INSERT INTO authors(fullname,email,password)
 VALUES
 ('ana cleta','ana@correo.es','123456'),
@@ -34,15 +34,16 @@ VALUES
 ('isa gomez','isa@correo.es','124457')
 
 
---CREATE ENTRY FOR ENTRIES -TEST DATA 
-
-INSERT INTO entries(title,content,extract, image, email, category)
-VALUES 
-('Noticia: Un panda suelto por la ciudad', 'El panda se comió todas las frutas de una tienda','extract Noticia 2', 'image 2', 'isa@correo.es','Sucesos')
-
 --CREATE ENTRIES IN READERS TABLE (test data) 
 INSERT INTO readers(fullname,email,password)
 VALUES
 ('rosa diaz','rosa@correo.es','123456'),
 ('amy santiago','amy@correo.es','123457'),
 ('jake peralta','jake@correo.es','123466'),
+
+
+--CREATE ENTRY FOR ENTRIES -TEST DATA 
+
+INSERT INTO entries(title,content,extract, image, email, category)
+VALUES 
+('Noticia: Un panda suelto por la ciudad', 'El panda se comió todas las frutas de una tienda','extract Noticia 2', 'image 2', 'isa@correo.es','Sucesos')

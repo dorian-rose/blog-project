@@ -1,6 +1,8 @@
+
+//postgres commands used in APIs
 const queries = {
     getAllAuthEntries:
-        `SELECT e.title, e.image, e.date, TO_CHAR(e.date, 'DD/MM/YYYY') AS formatDate, e.extract, a.email
+        `SELECT e.title, e.image, e.date, TO_CHAR(e.date, 'DD/MM/YYYY') AS formatDate, e.extract, a.email, a.fullname
             FROM entries AS e
             INNER JOIN authors AS a
             ON e.email = a.email
@@ -28,7 +30,7 @@ const queries = {
     deleteEntries: `DELETE 
            FROM entries 
            WHERE title=$1 AND email=$2`,
-    searchEntries: `SELECT title, image, date, extract, email
+    searchEntries: `SELECT title, image, date, TO_CHAR(date, 'DD/MM/YYYY') AS formatDate, extract, email
             FROM entries
             WHERE  title LIKE $1 OR content LIKE $1
             LIMIT $2

@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 
+//generate new token using jsonWebToken
+//receive arguments from where called in login or renew
 const generateJwt = (email, userName) => {
     return new Promise((resolve, reject) => {
         let payload = { email, userName };

@@ -1,4 +1,7 @@
+//import Pool from postgres
 const { Pool } = require("pg")
+
+//import queries from queries.js to access commands stored there
 const queries = require("./queries")
 
 const pool = new Pool({
@@ -13,7 +16,9 @@ const pool = new Pool({
 const getUserReader = async (email) => {
     let client, result;
     try {
+        //connect to db
         client = await pool.connect()
+        //collect command from queries.js and call to db
         const data = await client.query(queries.getUserReader, [email])
         result = data.rows
     } catch (error) {

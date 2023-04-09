@@ -1,8 +1,10 @@
 const { getAuthEntries, getEntriesAll, getEntryByTitle, createNewEntry, changeEntry, removeEntry, searchForEntry, getNumberEntries } = require("../models/entriesModels")
 
+//retrieve details of all entries from one author (by author email)
 const getOneAuthEntries = async (req, res) => {
     let { author, limit, skip } = req.params
     try {
+        //call to entriesModels
         const entries = await getAuthEntries(author, limit, skip)
         if (entries.length == 0) {
             return res.status(404).json({ ok: false, msg: "You have no entries" })
@@ -17,9 +19,11 @@ const getOneAuthEntries = async (req, res) => {
     }
 }
 
+//retrieve details of all entries from all authors.
 const getEntries = async (req, res) => {
     let { limit, skip } = req.params
     try {
+        //call to entriesModels
         const entries = await getEntriesAll(limit, skip)
         if (entries.length == 0) {
             return res.status(404).json({ ok: false, msg: "No entries available" })
@@ -34,10 +38,11 @@ const getEntries = async (req, res) => {
     }
 }
 
-
+//get all details of one entry, by title and author 
 const getEntry = async (req, res) => {
     const { title, author } = req.params
     try {
+        //call to entriesModels
         const entry = await getEntryByTitle(title, author)
         if (entry.length == 0) {
             res.status(404).json({ ok: false, msg: "Unable to retrieve this article" })
@@ -47,10 +52,12 @@ const getEntry = async (req, res) => {
     }
 }
 
+//create an entry and asign an author
 const createEntry = async (req, res) => {
     const body = req.body
     const { author } = req.params
     try {
+        //call to entriesModels
         const entry = await getEntryByTitle(body.title, author)
         if (entry.length) {
             res.status(500).json({ ok: false, errors: [{ msg: "You already have an article with this title" }] })
@@ -64,15 +71,18 @@ const createEntry = async (req, res) => {
     }
 
 }
+//update an existig entry
 const updateEntry = async (req, res) => {
     const { title, author } = req.params
     const body = req.body
     try {
+        //call to entriesModels to find title of article to be changed
         const entry = await getEntryByTitle(body.title, author)
         console.log("entry", entry)
         if (entry.length) {
             res.status(500).json({ ok: false, errors: [{ msg: "You already have an article with this title" }] })
         } else {
+            //if entry exists, call to entriesModels to update columns
             await changeEntry(body, author, title)
             res.status(201).json({ ok: true })
         }
@@ -83,6 +93,7 @@ const updateEntry = async (req, res) => {
 const deleteEntry = async (req, res) => {
     const { title, author } = req.body
     try {
+        //call to entriesModels
         await removeEntry(author, title)
         res.status(200).json({ ok: true })
     } catch (error) {
@@ -93,6 +104,7 @@ const deleteEntry = async (req, res) => {
 const searchEntry = async (req, res) => {
     const { search, limit, skip } = req.params
     try {
+        //call to entriesModels
         const entries = await searchForEntry(search, limit, skip)
         if (entries.length == 0) { res.status(404).json({ ok: false, msg: "No results" }) }
         else {
@@ -111,7 +123,7 @@ const getNumberOfEntries = async (req, res) => {
         if (email) {
             numEntries = await getNumberEntries(email)
         } else if (search) {
-            numEntries = await getNumberEntries(email)
+            numEntries = await getNumberEntries(null, search)
         } else {
             numEntries = await getNumberEntries()
         }

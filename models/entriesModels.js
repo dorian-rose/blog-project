@@ -1,6 +1,9 @@
 const { Pool } = require("pg")
+
+//import queries from queries.js to access commands stored there
 const queries = require("./queries")
 
+//configure connection to db in local
 const pool = new Pool({
     host: "localhost",
     user: "postgres",
@@ -12,7 +15,9 @@ const pool = new Pool({
 const getAuthEntries = async (email, limit, skip) => {
     let client, result;
     try {
+        //connect to db
         client = await pool.connect()
+        //make call, using command collected from queries.js 
         const data = await client.query(queries.getAllAuthEntries, [email, limit, skip])
         result = data.rows
     } catch (error) {
@@ -26,7 +31,9 @@ const getAuthEntries = async (email, limit, skip) => {
 const getEntriesAll = async (limit, skip) => {
     let client, result;
     try {
+        //connect to db
         client = await pool.connect()
+        //make call, using command collected from queries.js 
         const data = await client.query(queries.getAllEntries, [limit, skip])
         result = data.rows
     } catch (error) {
@@ -40,7 +47,9 @@ const getEntriesAll = async (limit, skip) => {
 const getEntryByTitle = async (title, author) => {
     let client, result;
     try {
+        //connect to db
         client = await pool.connect()
+        //make call, using command collected from queries.js 
         const data = await client.query(queries.getEntry, [title, author])
         result = data.rows
     } catch (error) {
@@ -53,7 +62,9 @@ const getEntryByTitle = async (title, author) => {
 const createNewEntry = async (body, email) => {
     let client, result;
     try {
+        //connect to db
         client = await pool.connect()
+        //make call, using command collected from queries.js 
         result = await client.query(queries.createEntry, [body.title, body.content, body.extract, body.image, email, body.category])
     } catch (error) {
         console.log(error)
@@ -65,7 +76,9 @@ const createNewEntry = async (body, email) => {
 const changeEntry = async (body, email, title) => {
     let client, result;
     try {
+        //connect to db
         client = await pool.connect()
+        //make call, using command collected from queries.js 
         result = await client.query(queries.updateEntries, [body.title, body.content, body.extract, body.image, email, body.category, title])
     } catch (error) {
         console.log(error)
@@ -76,7 +89,9 @@ const changeEntry = async (body, email, title) => {
 const removeEntry = async (email, title) => {
     let client, result;
     try {
+        //connect to db
         client = await pool.connect()
+        //make call, using command collected from queries.js 
         result = await client.query(queries.deleteEntries, [title, email])
     } catch (error) {
         console.log(error)
@@ -87,7 +102,9 @@ const removeEntry = async (email, title) => {
 const searchForEntry = async (search, limit, skip) => {
     let client, result;
     try {
+        //connect to db
         client = await pool.connect()
+        //make call, using command collected from queries.js 
         data = await client.query(queries.searchEntries, [`%${search}%`, limit, skip])
         result = data.rows
     } catch (error) {
@@ -100,12 +117,14 @@ const searchForEntry = async (search, limit, skip) => {
 const getNumberEntries = async (email, search) => {
     let client, result;
     try {
+        //connect to db
         client = await pool.connect()
+        //make call, using command collected from queries.js, command used will depend on argument received from entriesController
         if (email) {
             data = await client.query(queries.getNumEntriesPerAuth, [email])
             result = data.rows
         } else if (search) {
-            data = await client.query(queries.getNumEntriesSearch, [search])
+            data = await client.query(queries.getNumEntriesSearch, [`%${search}%`])
             result = data.rows
         } else {
             data = await client.query(queries.getNumEntries)
