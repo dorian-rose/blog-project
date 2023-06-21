@@ -4,11 +4,11 @@ const jwt = require("jsonwebtoken");
 //receive arguments from where called in login or renew
 const generateJwt = (email, userName) => {
     return new Promise((resolve, reject) => {
-        let payload = { email, userName };
+        let user = { email };
         jwt.sign(
-            payload,
+            user,
             process.env.JWT_SECRET_KEY,
-            { expiresIn: "3h" },
+            { expiresIn: "1h" },
             (error, token) => {
                 if (error) {
                     console.log(error);

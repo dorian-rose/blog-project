@@ -1,5 +1,19 @@
 # blog-project
 
+## Start:
+
+- Built with node. To download node_modules, run in terminal:
+
+  - npm i
+
+- To run server, run (in developer mode):
+  - npm run dev
+- In production:
+
+  - npm start
+
+- Environment variables that needs to be configured are noted in .env.template
+
 APIs pull data from postgres database. Database requires tables as per document 'queries.sql' in this repository.
 Test data for Authors and Readers also included in 'queries.sql'
 
