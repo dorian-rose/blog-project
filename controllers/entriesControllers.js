@@ -74,13 +74,16 @@ const createEntry = async (req, res) => {
 //update an existig entry
 const updateEntry = async (req, res) => {
     const { title, author } = req.params
+
     const body = req.body
+
+
     try {
         //call to entriesModels to find title of article to be changed
         const entry = await getEntryByTitle(body.title, author)
 
         if (entry.length == 0) { //entry doesn't exist
-            res.status(500).json({ ok: false, errors: [{ msg: "This article doesn't exist" }] })
+            res.status(404).json({ ok: false, errors: [{ msg: "This article doesn't exist" }] })
         } else {
             //if entry exists, call to entriesModels to update columns
             await changeEntry(body, author, title)

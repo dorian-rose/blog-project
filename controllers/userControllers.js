@@ -68,7 +68,7 @@ const loginUserReader = async (req, res) => {
         //if password is not a match in step above, return error
         if (!passwordMatch) {
 
-            return res.status(400).json({
+            return res.status(500).json({
                 ok: false,
                 passwordMatch,
                 msg: "Password incorrect",
@@ -97,14 +97,14 @@ const loginUserAuthor = async (req, res) => {
     //retrieve reader details to see if exists
     try {
         const { email, password } = req.body;
-
+        console.log(email, "email")
         const user = await getUserAuthor(email)
 
         if (user.length == 0) {
             console.log("user doesn't exist")
             return res.status(404).json({
                 ok: false,
-                msg: "User with this email doesn't exist",
+                msg: "User or password incorrect",
             });
         }
 
@@ -117,15 +117,15 @@ const loginUserAuthor = async (req, res) => {
         //if password is not a match in step above, return error
         if (!passwordMatch) {
 
-            return res.status(400).json({
+            return res.status(404).json({
                 ok: false,
                 passwordMatch,
-                msg: "Password incorrect",
+                msg: "User or password incorrect",
             });
         }
 
         //if password a match, generate token and return favourable res status
-        const token = await generateJwt(user[0].email, user[0].fullname);
+        const token = await generateJwt(user[0].email);
 
         return res.status(200).json({
             ok: true,
@@ -145,13 +145,23 @@ const loginUserAuthor = async (req, res) => {
 
 //renew token 
 const renew = async (req, res) => {
-    const { id, name } = req;
-    const token = await generateJwt(id, name);
-    return res.status(200).json({
-        ok: true,
-        msg: "webtoken renewed",
-        token,
-    });
+    const { email } = req.body;
+    try {
+        const token = await generateJwt(email);
+        res.status(200).json({
+            ok: true,
+            msg: "webtoken renewed",
+            token,
+        });
+    } catch (error) {
+        res.status(500).json({
+            ok: true,
+            msg: "unable to renew webtoken",
+
+        });
+    }
+
+
 };
 
 module.exports = { getReader, loginUserReader, renew, getAuthor, loginUserAuthor };

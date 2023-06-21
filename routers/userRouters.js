@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { validateJwt } = require("../middleware/validateJWT");
+
 const {
     loginUserReader,
     renew,
@@ -18,6 +18,6 @@ router.post("/author", loginUserAuthor);
 //retrieve details of user (author, admin)
 router.post("/author/verify", getAuthor)
 //renew jsonWebToken, middleware for validation
-router.get("/renew", validateJwt, renew);
+router.post("/renew", renew);
 
 module.exports = router;

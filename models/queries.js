@@ -1,5 +1,6 @@
 
 //postgres commands used in APIs
+
 const queries = {
     getAllAuthEntries:
         `SELECT e.title, e.image, e.date, TO_CHAR(e.date, 'DD/MM/YYYY') AS formatDate, e.extract, a.email, a.fullname
@@ -7,13 +8,13 @@ const queries = {
             INNER JOIN authors AS a
             ON e.email = a.email
             WHERE a.email = $1
-            ORDER BY e.title
+            ORDER BY e.date DESC
             LIMIT $2
             OFFSET $3`,
     getAllEntries:
         `SELECT title, image, date, TO_CHAR(date, 'DD/MM/YYYY') AS formatDate, content, extract, email
             FROM entries 
-            ORDER BY title
+            ORDER BY date DESC 
             LIMIT $1
             OFFSET $2`,
     getEntry: `SELECT e.title, e.image, e.extract, e.date, TO_CHAR(e.date, 'DD/MM/YYYY') AS formatDate, e.content, e.category, a.email, a.fullname

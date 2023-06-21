@@ -5,10 +5,10 @@ const { Pool } = require("pg")
 const queries = require("./queries")
 
 const pool = new Pool({
-    host: "localhost",
-    user: "postgres",
-    database: "blog",
-    password: "admin"
+    host: process.env.ELEPHANT_HOST,
+    user: process.env.ELEPHANT_USER,
+    database: process.env.ELEPHANT_DB,
+    password: "G2XNalDLbGL7V69udqZipy0lErcXt3_D",
 })
 
 

@@ -1,3 +1,7 @@
+/**
+ * 
+ */
+
 const { Pool } = require("pg")
 
 //import queries from queries.js to access commands stored there
@@ -5,13 +9,21 @@ const queries = require("./queries")
 
 //configure connection to db in local
 const pool = new Pool({
-    host: "localhost",
-    user: "postgres",
-    database: "blog",
-    password: "admin"
+    host: process.env.ELEPHANT_HOST,
+    user: process.env.ELEPHANT_USER,
+    database: process.env.ELEPHANT_DB,
+    password: "G2XNalDLbGL7V69udqZipy0lErcXt3_D",
 })
 
 //get all entries by author
+/**
+ * 
+ * @param {String} email user email
+ * @param {Number} limit number of entries per page
+ * @param {Number} skip number of entries to skip before first entry
+ * @returns {array}
+ * @throws {error}
+ */
 const getAuthEntries = async (email, limit, skip) => {
     let client, result;
     try {
