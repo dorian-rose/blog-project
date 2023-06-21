@@ -112,6 +112,7 @@ const removeEntry = async (email, title) => {
     return result
 }
 const searchForEntry = async (search, limit, skip) => {
+
     let client, result;
     try {
         //connect to db
